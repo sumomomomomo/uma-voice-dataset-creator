@@ -1,6 +1,6 @@
 # Uma Voice Dataset Creator
 
-A high-performance tool for extracting voice data, text, and metadata from *Umamusume: Pretty Derby*. 
+A high-performance tool for extracting voice data, text, and metadata from *Umamusume: Pretty Derby*. Only supports JP for now.
 
 This tool also includes a stress mode (because it caught instability on my 13900k that OCCT did not catch).
 
@@ -48,5 +48,6 @@ You will be presented with an interactive menu:
     * `global_story_deep_scan.csv`: Detailed dataset including Speaker, Text, Ruby, and Audio Paths.
 
 ## Troubleshooting
+
 
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
