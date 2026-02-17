@@ -40,14 +40,58 @@ You will be presented with an interactive menu:
 3. **Full Story Scan:** Extracts all text/voice pairs from all story timelines (CPU & I/O heavy).
 4. **Test Mode:** If selected, limits the scan to 1,000 random rows for quick verification.
 
-### Output
+## Output
 
-* **Audio:** Saved as `.wav` files in the `output/` directory, organized by Character ID or Story ID.
-* **Data:** 
-    * `global_system_voices.csv`: Transcript and paths for system voices.
-    * `global_story_deep_scan.csv`: Detailed dataset including Speaker, Text, Ruby, and Audio Paths.
+### 1. Audio
+Extracted into the `output/` directory, separated by category.
+
+```text
+output/
+├── system/
+│   ├── 1001/                   # Character ID
+│   │   ├── sys_1001_home_001.wav
+│   │   ├── sys_1001_title_002.wav
+│   │   └── ...
+│   └── ...
+│
+├── story/
+│   ├── 501001501/              # Story ID
+│   │   ├── 990001_001.wav      # {VoiceSheetId}_{CueId}.wav
+│   │   ├── 990001_002.wav
+│   │   └── ...
+│   └── ...
+│
+├── global_story_deep_scan.csv  # Metadata for Story Mode
+└── global_system_voices.csv    # Metadata for System Mode
+
+```
+
+### 2. `global_story_deep_scan.csv` (Story Mode)
+Contains the full dialogue timeline, including metadata and pointers to extracted audio.
+
+| Column | Description |
+| :--- | :--- |
+| **StoryId** | The unique identifier for the story chapter. |
+| **BlockIndex** | The sequential index of the text block within the conversation. |
+| **CharaId** | The internal ID of the speaker. |
+| **SpeakerName** | The display name of the character speaking. |
+| **Text** | The actual dialogue text. |
+| **RubyText** | Furigana (reading aids) applied to the text. Formatted as `CharXPosition:Reading` (e.g., `4.0:たぐい`). |
+| **VoiceSheetId** | The ID of the audio bank (`.acb` file) containing this voice line. |
+| **CueId** | The specific track index within the audio bank. |
+| **AudioFilePath** | Relative path to the extracted `.wav` file. |
+| **Transcript** | Reserved for AI transcription (empty by default). |
+
+### 3. `global_system_voices.csv` (System Mode)
+Contains "System" voices such as Title Calls, Gacha animations, and Home Screen lines.
+
+| Column | Description |
+| :--- | :--- |
+| **Text** | The transcript of the line. |
+| **CharaId** | The internal ID of the character. |
+| **AudioFilePath** | Relative path to the extracted `.wav` file. |
 
 ## Troubleshooting
 
-
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
+
