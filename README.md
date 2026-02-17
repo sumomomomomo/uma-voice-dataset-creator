@@ -97,4 +97,6 @@ Contains "System" voices such as Title Calls, Gacha animations, and Home Screen 
 
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
 
+* **Rows in story csv that have a sound file that does not match the transcript:** Not all timelines are fully voiced. Some timelines only feature partial voicing and therefore a track of an uma from a common track bank. Hence some rows will have text with a very short corresponding .wav file. (TODO: Prefixes of folder names within `output/story` that have this issue to be confirmed)
+
 
