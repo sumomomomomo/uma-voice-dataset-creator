@@ -8,6 +8,8 @@ This tool also includes a stress mode (because it caught instability on my 13900
 
 **This tool requires a compiled `libpyvgmstream` binary to function.**
 
+Credit to hugeBlack for their [pyvgmstream](https://github.com/hugeBlack/pyvgmstream) project. The binary provided in this repo is a compilation of pyvgmstream.
+
 * **Windows:** You must place `libpyvgmstream.pyd` in the root directory of this project.
 * **Linux:** You must place `libpyvgmstream.so` in the root directory.
 
@@ -94,4 +96,5 @@ Contains "System" voices such as Title Calls, Gacha animations, and Home Screen 
 ## Troubleshooting
 
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
+
 
