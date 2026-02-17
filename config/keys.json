@@ -1,0 +1,14 @@
+{
+    "DB_BASE_KEY_HEX": "F170CEA4DFCEA3E1A5D8C70BD1000000",
+    "DB_KEY_JP_HEX": "6D5B65336336632554712D73505363386D34377B356370233734532973433633",
+    "AB_KEY_HEX": "532B4631E4A7B9473E7CFB",
+    "UMA_HCA_KEY": "0x450D608C479F",
+    "HEADER_SIZE": 256,
+    "PATHS": {
+        "meta": "C:\\Users\\Matt\\Documents\\Games\\Umamusume\\umamusume_Data\\Persistent\\meta",
+        "master": "C:\\Users\\Matt\\Documents\\Games\\Umamusume\\umamusume_Data\\Persistent\\master\\master.mdb",
+        "dat": "C:\\Users\\Matt\\Documents\\Games\\Umamusume\\umamusume_Data\\Persistent\\dat",
+        "output": "output"
+    },
+    "EXPOSE_STRESS_MODE": false
+}

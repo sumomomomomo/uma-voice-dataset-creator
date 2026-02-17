@@ -1,0 +1,4 @@
+UnityPy>=1.7.0
+apsw
+acb
+tqdm
