@@ -78,11 +78,12 @@ Contains the full dialogue timeline, including metadata and pointers to extracte
 | **CharaId** | The internal ID of the speaker. |
 | **SpeakerName** | The display name of the character speaking. |
 | **Text** | The actual dialogue text. |
-| **RubyText** | Furigana (reading aids) applied to the text. Formatted as `CharXPosition:Reading` (e.g., `4.0:たぐい`). |
+| **RubyText** | Furigana (reading aids) applied to the text. Formatted as `CharXPosition:Reading` (e.g., `4.0:たぐい`). Empty by default. |
 | **VoiceSheetId** | The ID of the audio bank (`.acb` file) containing this voice line. |
-| **CueId** | The specific track index within the audio bank. |
-| **AudioFilePath** | Relative path to the extracted `.wav` file. |
-| **Transcript** | Reserved for AI transcription (empty by default). |
+| **CueId** | The specific track index within the audio bank. -1 by default. |
+| **AudioFilePath** | Relative path to the extracted `.wav` file. Empty by default. |
+| **AudioLength** | The duration of the extracted audio clip in seconds. -1.0 by default. |
+| **CharacterPerSecond** | Value of `Text` divided by `AudioLength`. -1.0 by default. Rounded to 2dp. |
 
 ### 3. `global_system_voices.csv` (System Mode)
 Contains "System" voices such as Title Calls, Gacha animations, and Home Screen lines.
@@ -96,7 +97,5 @@ Contains "System" voices such as Title Calls, Gacha animations, and Home Screen 
 ## Troubleshooting
 
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
-
-* **Rows in story csv that have a sound file that does not match the transcript:** Not all timelines are fully voiced. Some timelines only feature partial voicing and therefore a track of an uma from a common track bank. Hence some rows will have text with a very short corresponding .wav file. (TODO: Prefixes of folder names within `output/story` that have this issue to be confirmed)
 
 
