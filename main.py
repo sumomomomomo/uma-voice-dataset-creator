@@ -10,9 +10,10 @@ from core.provider import UmaProvider
 from core.processor import UmaProcessor
 
 # --- CONFIGURATION ---
+# Removed 'Transcript', Added 'AudioLength' and 'CharacterPerSecond'
 STORY_CSV_COLUMNS = [
     'StoryId', 'BlockIndex', 'CharaId', 'SpeakerName', 'Text', 'RubyText', 
-    'VoiceSheetId', 'CueId', 'AudioFilePath', 'Transcript'
+    'VoiceSheetId', 'CueId', 'AudioFilePath', 'AudioLength', 'CharacterPerSecond'
 ]
 SYSTEM_CSV_COLUMNS = ['Text', 'CharaId', 'AudioFilePath']
 
@@ -105,7 +106,8 @@ def system_worker_task(worker_id, chunk, config):
                 fname = f"sys_{c_id}_{entry['cue_sheet']}_{entry['cue_id']}.wav"
                 wav_path = os.path.join(out_dir, fname)
                 
-                final_path = processor.extract_only(
+                # Unpack tuple (path, duration), ignore duration for system scan
+                final_path, _ = processor.extract_only(
                     entry['acb_path'], entry['awb_path'], entry['cue_id'], wav_path
                 )
                 if final_path:
@@ -184,6 +186,8 @@ def story_worker_task(worker_id, story_chunk, shared_audio_map, config):
                         vs_id = str(block['VoiceSheetId'])
                         cue_id = block['CueId']
                         audio_path = ""
+                        audio_len = -1.0
+                        cps = -1.0
                         
                         info = shared_audio_map.get(vs_id)
                         if info and cue_id != -1 and info['acb_path']:
@@ -191,11 +195,19 @@ def story_worker_task(worker_id, story_chunk, shared_audio_map, config):
                             fname = f"{vs_id}_{cue_id:03d}.wav"
                             target_path = os.path.join(out_dir, fname)
                             
-                            extracted = processor.extract_only(
+                            extracted_path, duration = processor.extract_only(
                                 info['acb_path'], info['awb_path'], cue_id, target_path
                             )
-                            if extracted: audio_path = extracted
-                            else: audio_path = "FAILED"
+                            
+                            if extracted_path: 
+                                audio_path = extracted_path
+                                audio_len = round(duration, 4)
+                            else: 
+                                audio_path = "FAILED"
+                        
+                        # Calculate CPS (Characters Per Second)
+                        if audio_len > 0 and block['Text']:
+                            cps = round(len(block['Text']) / audio_len, 2)
 
                         writer.writerow({
                             'StoryId': story_id, 
@@ -207,7 +219,8 @@ def story_worker_task(worker_id, story_chunk, shared_audio_map, config):
                             'VoiceSheetId': block['VoiceSheetId'],
                             'CueId': block['CueId'], 
                             'AudioFilePath': audio_path, 
-                            'Transcript': ""
+                            'AudioLength': audio_len,
+                            'CharacterPerSecond': cps
                         })
                 except Exception as e:
                     print(f"[{worker_id}] Error {story_id}: {e}")
