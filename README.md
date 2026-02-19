@@ -98,4 +98,7 @@ Contains "System" voices such as Title Calls, Gacha animations, and Home Screen 
 
 * **High RAM Usage:** The tool uses `multiprocessing` and creates one process per logical core. If you have many cores (e.g., 32+), it may consume significant RAM. Reduce the worker count in `main.py` if necessary.
 
+## TODO
+
+* **Set Flag to Download Relevant Assets:** The tool only crawls for audio assets that are already downloaded. It is possible to modify `meta` to force the game to download all available assets. To be implemented in a future version.
 
